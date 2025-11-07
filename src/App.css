@@ -1,0 +1,66 @@
+.hero-banner {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3rem 2rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 90%;
+  text-align: center;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hero-banner h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-banner p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+.hero-banner {
+  /* ... existing styles ... */
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 1s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+body {
+  background: url('https://via.placeholder.com/1920x1080/007BFF/FFFFFF?text=Tech+Background') no-repeat center center;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.app-background {
+  background: url('https://via.placeholder.com/1920x1080/007BFF/FFFFFF?text=Tech+Background') no-repeat center center;
+  background-size: cover;
+  min-height: 100vh;
+}
+/* Header.css */
+.call-button {
+  background-color: #FEDDCB !important;
+  border-color: #FEDDCB !important;
+  color: #000 !important;
+  font-weight: bold;
+}
+
+.expert-button {
+  background-color: #D4FF00 !important;
+  border-color: #D4FF00 !important;
+  color: #000 !important;
+  font-weight: bold;
+}

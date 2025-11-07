@@ -1,0 +1,59 @@
+/* FeaturesSection.css */
+
+.features-section {
+  background-color: #000;
+  color: #fff;
+  padding: 60px 30px;
+  
+}
+
+/* Force all text to white */
+.features-section h3,
+.features-section p {
+  color: #fff !important;
+}
+
+/* Icon container */
+.features-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 2px;
+  
+}
+
+/* Style the icon itself */
+.features-icon {
+  color: #FFA500; /* Orange */
+  font-size: 40px;
+  transition: transform 0.3s ease, color 0.3s ease;
+  /* Optional: add a subtle "outlined" effect using text shadow */
+  text-shadow: 0 0 2px rgba(255, 165, 0, 0.6);
+  margin-right: 50px !important;
+
+}
+
+/* Hover effect: float up + brighter orange */
+.features-col:hover .features-icon {
+  transform: translateY(-4px);
+  color: #FF8C00;
+}
+
+/* Content layout */
+.features-content {
+  display: flex;
+  align-items: flex-start;
+}
+
+.features-text {
+  flex: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .features-section {
+    padding: 40px 0;
+  }
+}
