@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+  const [isMobileServicesDropdownOpen, setIsMobileServicesDropdownOpen] = useState(false);
+  const [dropdownTimeout, setDropdownTimeout] = useState(null);
   const logo = "https://www.linkpicture.com/q/logo_142.png";
+
+  // Handle dropdown with delay to prevent flickering
+  const handleDropdownEnter = () => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+    }
+    setIsServicesDropdownOpen(true);
+  };
+
+  const handleDropdownLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsServicesDropdownOpen(false);
+    }, 100); // Small delay to allow moving to dropdown
+    setDropdownTimeout(timeout);
+  };
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -12,12 +30,23 @@ function Header() {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
+      // Close mobile dropdown when menu is closed
+      setIsMobileServicesDropdownOpen(false);
     }
 
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isMobileMenuOpen]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (dropdownTimeout) {
+        clearTimeout(dropdownTimeout);
+      }
+    };
+  }, [dropdownTimeout]);
 
   // Handle click outside to close mobile menu
   useEffect(() => {
@@ -43,7 +72,14 @@ function Header() {
   const menuItems = [
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
-    { name: 'Services', path: '/services' },
+    { 
+      name: 'Services', 
+      path: '/services',
+      hasDropdown: true,
+      children: [
+        { name: 'Brand consultancy', path: '/services/brand-consultancy' }
+      ]
+    },
     { name: 'Clients', path: '/clients' },
     { name: 'Blogs', path: '/blogs' },
     { name: 'Contact Us', path: '/contact' },
@@ -89,44 +125,136 @@ function Header() {
             {/* Desktop Menu */}
             <div className="d-none d-lg-flex align-items-center gap-4">
               {menuItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="text-decoration-none text-white fw-bold position-relative"
-                  style={{
-                    fontSize: '1rem',
-                    letterSpacing: '0.5px',
-                    transition: 'all 0.3s ease',
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.color = '#D4FF00';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.color = '#ffffff';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  {item.name}
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: '-5px',
-                      left: 0,
-                      width: 0,
-                      height: '2px',
-                      backgroundColor: '#D4FF00',
-                      transition: 'width 0.3s ease',
-                    }}
-                    onMouseOver={(e) => {
-                      e.target.style.width = '100%';
-                    }}
-                    onMouseOut={(e) => {
-                      e.target.style.width = '0';
-                    }}
-                  />
-                </Link>
+                <div key={item.name} className="position-relative">
+                  {item.hasDropdown ? (
+                    <div
+                      className="services-dropdown-container"
+                      style={{
+                        position: 'relative',
+                      }}
+                      onMouseEnter={handleDropdownEnter}
+                      onMouseLeave={handleDropdownLeave}
+                    >
+                      <div
+                        className="d-flex align-items-center gap-1 text-decoration-none text-white fw-bold cursor-pointer"
+                        style={{
+                          fontSize: '1rem',
+                          letterSpacing: '0.5px',
+                          transition: 'all 0.3s ease',
+                          textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                          cursor: 'pointer',
+                          paddingBottom: '20px', // Extend hover area
+                          paddingTop: '10px',
+                          marginBottom: '-20px', // Compensate for padding
+                          marginTop: '0px', // Ensure proper alignment
+                        }}
+                        onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)} // Toggle on click for mobile
+                      >
+                        <span
+                          style={{
+                            transition: 'all 0.3s ease',
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.color = '#D4FF00'; // Yellow text on hover
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.color = '#ffffff';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          {item.name}
+                        </span>
+                        <FaChevronDown 
+                          size={12}
+                          style={{
+                            transition: 'all 0.3s ease',
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Dropdown Menu */}
+                      <div
+                        className={`position-absolute bg-dark border border-secondary rounded-3 shadow-lg ${isServicesDropdownOpen ? 'd-block' : 'd-none'}`}
+                        style={{
+                          top: '100%',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                          minWidth: '220px',
+                          marginTop: '0px', // Remove gap
+                          zIndex: 1000,
+                          backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                          backdropFilter: 'blur(10px)',
+                          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
+                        }}
+                      >
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.name}
+                            to={child.path}
+                            className="d-block text-decoration-none text-white px-4 py-3 border-bottom border-secondary"
+                            style={{
+                              fontSize: '0.9rem',
+                              fontWeight: '500',
+                              transition: 'all 0.3s ease',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.5px',
+                              color: '#ffffff', // Ensure initial color is white
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.backgroundColor = '#D4FF00';
+                              e.currentTarget.style.color = '#000000'; // Black text on yellow background
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.backgroundColor = 'transparent';
+                              e.currentTarget.style.color = '#ffffff'; // Back to white
+                            }}
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className="text-decoration-none text-white fw-bold position-relative"
+                      style={{
+                        fontSize: '1rem',
+                        letterSpacing: '0.5px',
+                        transition: 'all 0.3s ease',
+                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                      }}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.color = '#D4FF00';
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.color = '#ffffff';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                      }}
+                    >
+                      {item.name}
+                      <span
+                        style={{
+                          position: 'absolute',
+                          bottom: '-5px',
+                          left: 0,
+                          width: 0,
+                          height: '2px',
+                          backgroundColor: '#D4FF00',
+                          transition: 'width 0.3s ease',
+                        }}
+                        onMouseOver={(e) => {
+                          e.target.style.width = '100%';
+                        }}
+                        onMouseOut={(e) => {
+                          e.target.style.width = '0';
+                        }}
+                      />
+                    </Link>
+                  )}
+                </div>
               ))}
 
               {/* CTA Buttons */}
@@ -271,34 +399,113 @@ function Header() {
           {/* Menu Items - Simple Vertical Layout */}
           <div className="d-flex flex-column justify-content-start align-items-start" style={{ padding: '2rem', paddingTop: '4rem' }}>
             {menuItems.map((item, index) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="d-block text-decoration-none text-white mb-4"
-                style={{
-                  fontSize: '1.8rem',
-                  fontWeight: '600',
-                  letterSpacing: '2px',
-                  transition: 'all 0.3s ease',
-                  animationDelay: `${index * 0.1}s`,
-                  animation: isMobileMenuOpen ? 'slideInRight 0.5s ease forwards' : 'none',
-                  textTransform: 'uppercase',
-                  color: '#ffffff',
-                  opacity: 0,
-                  transform: 'translateX(30px)',
-                }}
-                onClick={() => setIsMobileMenuOpen(false)}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.color = '#D4FF00';
-                  e.currentTarget.style.transform = 'translateX(10px)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.transform = 'translateX(0)';
-                }}
-              >
-                {item.name}
-              </Link>
+              <div key={item.name} style={{ width: '100%' }}>
+                {item.hasDropdown ? (
+                  <div>
+                    <div
+                      className="d-flex align-items-center justify-content-between text-decoration-none text-white mb-3"
+                      style={{
+                        fontSize: '1.8rem',
+                        fontWeight: '600',
+                        letterSpacing: '2px',
+                        transition: 'all 0.3s ease',
+                        animationDelay: `${index * 0.1}s`,
+                        animation: isMobileMenuOpen ? 'slideInRight 0.5s ease forwards' : 'none',
+                        textTransform: 'uppercase',
+                        color: '#ffffff',
+                        opacity: 0,
+                        transform: 'translateX(30px)',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setIsMobileServicesDropdownOpen(!isMobileServicesDropdownOpen)}
+                      onMouseOver={(e) => {
+                        e.currentTarget.style.color = '#D4FF00';
+                        e.currentTarget.style.transform = 'translateX(10px)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.currentTarget.style.color = '#ffffff';
+                        e.currentTarget.style.transform = 'translateX(0)';
+                      }}
+                    >
+                      <span>{item.name}</span>
+                      <FaChevronDown 
+                        size={16} 
+                        style={{
+                          transition: 'transform 0.3s ease',
+                          transform: isMobileServicesDropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)'
+                        }}
+                      />
+                    </div>
+                    
+                    {/* Mobile Dropdown Items - Only show when toggled */}
+                    {isMobileServicesDropdownOpen && (
+                      <div className="ms-4 mb-4" style={{ paddingLeft: '1rem' }}>
+                        {item.children.map((child, childIndex) => (
+                          <Link
+                            key={child.name}
+                            to={child.path}
+                            className="d-block text-decoration-none text-white mb-3"
+                            style={{
+                              fontSize: '1.3rem',
+                              fontWeight: '500',
+                              letterSpacing: '1px',
+                              transition: 'all 0.3s ease',
+                              animationDelay: `${(index * 0.1) + (childIndex * 0.05)}s`,
+                              animation: isMobileMenuOpen ? 'slideInRight 0.5s ease forwards' : 'none',
+                              textTransform: 'capitalize',
+                              color: '#ffffff',
+                              opacity: 0,
+                              transform: 'translateX(30px)',
+                            }}
+                            onClick={() => {
+                              setIsMobileMenuOpen(false);
+                              setIsMobileServicesDropdownOpen(false);
+                            }}
+                            onMouseOver={(e) => {
+                              e.currentTarget.style.color = '#D4FF00';
+                              e.currentTarget.style.transform = 'translateX(10px)';
+                            }}
+                            onMouseOut={(e) => {
+                              e.currentTarget.style.color = '#ffffff';
+                              e.currentTarget.style.transform = 'translateX(0)';
+                            }}
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    to={item.path}
+                    className="d-block text-decoration-none text-white mb-4"
+                    style={{
+                      fontSize: '1.8rem',
+                      fontWeight: '600',
+                      letterSpacing: '2px',
+                      transition: 'all 0.3s ease',
+                      animationDelay: `${index * 0.1}s`,
+                      animation: isMobileMenuOpen ? 'slideInRight 0.5s ease forwards' : 'none',
+                      textTransform: 'uppercase',
+                      color: '#ffffff',
+                      opacity: 0,
+                      transform: 'translateX(30px)',
+                    }}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.color = '#D4FF00';
+                      e.currentTarget.style.transform = 'translateX(10px)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }}
+                  >
+                    {item.name}
+                  </Link>
+                )}
+              </div>
             ))}
 
             {/* Mobile CTA Buttons */}

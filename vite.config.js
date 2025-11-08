@@ -11,6 +11,7 @@ export default defineConfig({
     host: true,
     allowedHosts: [
       'ws-ddcfbdd-cbbe-jfsjiifbyd.cn-hongkong-vpc.fcapp.run',
+      'ws-babbbcc-dcaa-gcstjyewbf.cn-hongkong-vpc.fcapp.run',
       'localhost',
       '127.0.0.1'
     ]
