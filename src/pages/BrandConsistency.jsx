@@ -1,8 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import './BrandConsistency.css';
 
 const BrandConsistency = () => {
+  const [expandedCards, setExpandedCards] = useState({
+    brandConsultancy: false,
+    serviceDesign: false
+  });
+
+  const toggleCard = (cardName) => {
+    setExpandedCards(prev => ({
+      ...prev,
+      [cardName]: !prev[cardName]
+    }));
+  };
+
+  const [hoveredLogo, setHoveredLogo] = useState(null);
+
+  const handleLogoHover = (index) => {
+    setHoveredLogo(index);
+    setTimeout(() => setHoveredLogo(null), 2000);
+  };
+
+  const clientLogos = [
+    {
+      name: "TechCorp Solutions",
+      description: "Leading technology consulting firm specializing in digital transformation",
+      logo: "https://www.freepnglogos.com/uploads/google-logo-new-history-png-9.png"
+    },
+    {
+      name: "Global Finance Partners",
+      description: "International financial services and investment management",
+      logo: "https://www.freepnglogos.com/uploads/google-logo-new-history-png-9.png"
+    },
+    {
+      name: "Innovate Health Systems",
+      description: "Healthcare technology solutions and medical device integration",
+      logo: "https://www.freepnglogos.com/uploads/google-logo-new-history-png-9.png"
+    },
+    {
+      name: "Smart Retail Analytics",
+      description: "Data-driven retail insights and customer behavior analysis",
+      logo: "https://www.freepnglogos.com/uploads/google-logo-new-history-png-9.png"
+    }
+  ];
   const portfolioProjects = [
     {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
@@ -18,6 +64,61 @@ const BrandConsistency = () => {
       image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
       title: "Vijayanand Travels",
       description: "Strategic brand repositioning and visual identity redesign for luxury travel company"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "TechNova",
+      description: "Digital transformation and brand modernization for technology startup"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "Fashion Forward",
+      description: "Complete brand identity redesign for sustainable fashion retailer"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "Green Earth",
+      description: "Environmental branding and sustainability messaging for eco-friendly products"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "HealthPlus",
+      description: "Healthcare branding and patient experience design for medical center"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "EduTech Pro",
+      description: "Educational platform branding and user experience optimization"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      title: "FinanceHub",
+      description: "Financial services rebranding and digital transformation strategy"
+    }
+  ];
+
+  // Swiper slider data
+  const swiperSlides = [
+    {
+      title: "Strategic Brand Positioning",
+      subtitle: "Elevate Your Market Presence",
+      description: "We help brands find their unique voice in crowded markets. Our strategic approach combines market research, competitive analysis, and creative thinking to position your brand for maximum impact and recognition.",
+      image: "https://static.wixstatic.com/media/74e377_934f344dc82849889c116d4307709f7b~mv2.png/v1/fill/w_581,h_492,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Tummoc%20Banner%20Image.png",
+      features: ["Market Analysis", "Competitive Intelligence", "Brand Architecture", "Positioning Strategy"]
+    },
+    {
+      title: "Visual Identity Design",
+      subtitle: "Create Memorable Experiences",
+      description: "Transform your brand vision into compelling visual experiences. From logo design to comprehensive brand guidelines, we create cohesive visual identities that resonate with your target audience.",
+      image: "https://static.wixstatic.com/media/74e377_934f344dc82849889c116d4307709f7b~mv2.png/v1/fill/w_581,h_492,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Tummoc%20Banner%20Image.png",
+      features: ["Logo Design", "Color Systems", "Typography", "Brand Guidelines"]
+    },
+    {
+      title: "Digital Brand Experience",
+      subtitle: "Engage Across All Platforms",
+      description: "Create seamless digital experiences that bring your brand to life online. We design responsive websites, mobile apps, and digital campaigns that deliver consistent brand messaging.",
+      image: "https://static.wixstatic.com/media/74e377_934f344dc82849889c116d4307709f7b~mv2.png/v1/fill/w_581,h_492,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Tummoc%20Banner%20Image.png",
+      features: ["Web Design", "Mobile Experience", "Social Media", "Digital Campaigns"]
     }
   ];
   return (
@@ -72,8 +173,8 @@ const BrandConsistency = () => {
           <Row className="g-4 mt-4">
             {portfolioProjects.map((project, index) => (
               <Col lg={4} md={6} xs={12} key={index} className="mb-5">
-                <div className="portfolio-card">
-                  <div className="card-image-container">
+                <div className="portfolio-card slim-card">
+                  <div className="card-image-container slim-container">
                     <img
                       src={project.image}
                       alt={project.title}
@@ -83,6 +184,148 @@ const BrandConsistency = () => {
                       <h4 className="image-title-text">{project.title}</h4>
                     </div>
                   </div>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </section>
+
+      {/* Swiper Slider Section */}
+      <section className="swiper-slider-section">
+        <Container fluid className="px-0">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={0}
+            slidesPerView={1}
+            centeredSlides={true}
+            navigation={{
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            }}
+            pagination={{
+              clickable: true,
+              el: '.swiper-pagination',
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            className="brand-swiper"
+          >
+            {swiperSlides.map((slide, index) => (
+              <SwiperSlide key={index}>
+                <div className="swiper-slide-content">
+                  <Row className="g-0 h-100">
+                    {/* Left Column - Text Content */}
+                    <Col lg={6} md={12} className="text-column">
+                      <div className="slide-text-content">
+                        <div className="slide-subtitle">{slide.subtitle}</div>
+                        <h2 className="slide-title">{slide.title}</h2>
+                        <p className="slide-description">{slide.description}</p>
+                        <div className="slide-features">
+                          {slide.features.map((feature, featureIndex) => (
+                            <div key={featureIndex} className="feature-item">
+                              <span className="feature-icon">✓</span>
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="slide-cta">
+                          <button className="slide-cta-button">Learn More</button>
+                        </div>
+                      </div>
+                    </Col>
+                    {/* Right Column - Image */}
+                    <Col lg={6} md={12} className="image-column">
+                      <div className="slide-image-container">
+                        <img
+                          src={slide.image}
+                          alt={slide.title}
+                          className="slide-image"
+                        />
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          
+          {/* Custom Navigation */}
+          <div className="swiper-button-prev">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <div className="swiper-button-next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          
+          {/* Custom Pagination */}
+          <div className="swiper-pagination"></div>
+        </Container>
+      </section>
+
+      {/* Three Column Section */}
+      <section className="three-column-section">
+        <Container>
+          <Row className="g-4">
+            {/* 1st Column - ABOUT THE SERVICE */}
+            <Col lg={4} md={6} xs={12} className="mb-4">
+              <div className="service-about">
+                <h2 className="service-about-title">ABOUT THE SERVICE</h2>
+              </div>
+            </Col>
+            
+            {/* 2nd Column - Brand Consultancy */}
+            <Col lg={4} md={6} xs={12} className="mb-4">
+              <div className="service-content">
+                <h3 className="service-title">Brand Consultancy</h3>
+                <p className="service-description">
+                  Elevate your brand's identity and strategy with our comprehensive brand consultancy services. From market analysis to brand positioning, we provide tailored solutions to enhance brand equity and foster meaningful connections with your target audience{expandedCards.brandConsultancy ? ' Our strategic approach encompasses deep market research, competitive intelligence, and brand architecture development.' : ''}
+                  <strong className="inline-read-more" onClick={() => toggleCard('brandConsultancy')}>{expandedCards.brandConsultancy ? ' Read Less' : ' Read More'}</strong>
+                </p>
+              </div>
+            </Col>
+            
+            {/* 3rd Column - Additional Service */}
+            <Col lg={4} md={6} xs={12} className="mb-4">
+              <div className="service-content">
+                <h3 className="service-title">Service Design</h3>
+                <p className="service-description">
+                  Create exceptional service experiences that delight your customers and build lasting relationships. Our service design approach combines user research, journey mapping, and experience optimization to deliver consistent, high-quality interactions{expandedCards.serviceDesign ? <><strong className="inline-read-more" onClick={() => toggleCard('serviceDesign')}> Read Less</strong></> : <><strong className="inline-read-more" onClick={() => toggleCard('serviceDesign')}> Read More</strong></>}
+                </p>
+                <div className={`expandable-content ${expandedCards.serviceDesign ? 'expanded' : ''}`}>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </section>
+
+      {/* Clients Section */}
+      <section className="clients-section">
+        <Container>
+          <div className="clients-header">
+            <h2 className="clients-title">CLIENTS</h2>
+          </div>
+          
+          <Row className="g-4 justify-content-center">
+            {clientLogos.map((client, index) => (
+              <Col lg={3} md={6} xs={6} className="mb-4">
+                <div className="logo-container"
+                  onMouseEnter={() => handleLogoHover(index)}
+                  onMouseLeave={() => setHoveredLogo(null)}
+                >
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="client-logo"
+                  />
                 </div>
               </Col>
             ))}
