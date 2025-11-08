@@ -1,25 +1,31 @@
 
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
-import Header from './components/Header'
+import Layout from './components/Layout'
 import Homepage from './pages/Homepage'
+import About from './pages/About'
+import ServicesPage from './pages/ServicesPage'
+import Clients from './pages/Clients'
+import Blogs from './pages/Blogs'
+import Contact from './pages/Contact'
 import 'swiper/css';
 import 'swiper/css/navigation'; // if using navigation arrows
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className='app-background'>
-      
-      <Homepage/>
-       
-      
-      
-     
-    </div>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/clients" element={<Clients />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Layout>
+    </Router>
   )
 }
 

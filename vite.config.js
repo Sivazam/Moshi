@@ -8,7 +8,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 3000,
-    host: true
+    host: true,
+    allowedHosts: [
+      'ws-ddcfbdd-cbbe-jfsjiifbyd.cn-hongkong-vpc.fcapp.run',
+      'localhost',
+      '127.0.0.1'
+    ]
   }
 })
 

@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const OurWork = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const sliderRef = useRef(null);
   const scrollPositionRef = useRef(0); // Store scroll position in ref
@@ -75,14 +73,6 @@ const OurWork = () => {
     };
   }, [isHovered]);
 
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev >= projects.length - 1 ? 0 : prev + 1));
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev <= 0 ? projects.length - 1 : prev - 1));
-  };
-
   return (
     <section style={{
       backgroundColor: '#0a0a0a',
@@ -113,69 +103,6 @@ const OurWork = () => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Navigation Arrows */}
-          <button
-            onClick={prevSlide}
-            style={{
-              position: 'absolute',
-              left: '-50px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              border: '2px solid rgba(255,255,255,0.3)',
-              borderRadius: '50%',
-              width: '50px',
-              height: '50px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              zIndex: 10,
-              transition: 'all 0.3s ease'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = 'rgba(255,255,255,0.2)';
-              e.target.style.borderColor = 'rgba(255,255,255,0.5)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
-              e.target.style.borderColor = 'rgba(255,255,255,0.3)';
-            }}
-          >
-            <FaArrowLeft color="#ffffff" size={20} />
-          </button>
-
-          <button
-            onClick={nextSlide}
-            style={{
-              position: 'absolute',
-              right: '-50px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              border: '2px solid rgba(255,255,255,0.3)',
-              borderRadius: '50%',
-              width: '50px',
-              height: '50px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              zIndex: 10,
-              transition: 'all 0.3s ease'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.backgroundColor = 'rgba(255,255,255,0.2)';
-              e.target.style.borderColor = 'rgba(255,255,255,0.5)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.backgroundColor = 'rgba(255,255,255,0.1)';
-              e.target.style.borderColor = 'rgba(255,255,255,0.3)';
-            }}
-          >
-            <FaArrowRight color="#ffffff" size={20} />
-          </button>
-
           {/* Auto-scrolling Projects Slider */}
           <div 
             ref={sliderRef}
